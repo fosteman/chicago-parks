@@ -27,33 +27,25 @@ export default observer(() => {
             <KeyboardArrowRightIcon />
           </IconButton>
         </Toolbar>
-        <Box sx={{ width: 300, p: 1 }}>
 
-          {core.selectedPark ? <>
+        {core.selectedPark ? <Box sx={{ width: 300, p: 1 }}>
             <Typography variant='h4' sx={{ mb: 2 }}>
-            {core.selectedPark?.properties!.title}
-          </Typography>
+              {core.selectedPark?.properties!.title}
+            </Typography>
 
             <Typography>
               {core.selectedPark?.properties!.description}
             </Typography>
-          </> :
+          </Box> :
 
-          <Box>
+          <Box sx={{  width: 300, height: '100%', display: 'flex', alignItems:'center', textAlign: 'center' }}>
             <Typography>
               Select a Chicago park
-            </Typography>
-
-            <img src={'https://www.nicepng.com/png/detail/519-5195611_park-icon-the-noun-project.png'} height={32} width={32} />
-
-            <Typography>
               on the map to see info about it!
             </Typography>
           </Box>
+        }
 
-          }
-
-        </Box>
       </Drawer>
     </>
   )
