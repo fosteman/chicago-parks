@@ -42,7 +42,7 @@ class Core {
   async loadParks(): Promise<FeatureCollection> {
     if (!this.dataSource) {
       return fetch(
-        '/api/parks',
+        'http://localhost:3000/api/parks',
       )
         .then(resp => resp.json())
         .then((json: FeatureCollection) => {
