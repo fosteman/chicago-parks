@@ -1,5 +1,5 @@
 import { configure, makeAutoObservable } from 'mobx'
-import { Feature, FeatureCollection } from '@turf/turf'
+import { center, Feature, FeatureCollection } from '@turf/turf'
 
 configure({
   enforceActions: 'never',
@@ -15,14 +15,23 @@ class Core {
 
   selectedPark: Feature | null = null
   dataSource?: FeatureCollection
+  mapControl = { latitude: 0, longitude: 0, zoom: 11 }
 
   drawerOpen = false
 
   selectPark(feature: Feature) {
     if (this.selectedPark?.id === feature.id) {
       this.selectedPark = null
+      this.mapControl.zoom = 11
     } else {
       this.selectedPark = feature
+
+      // find center
+      const { geometry: { coordinates: [longitude, latitude] } } = center(feature)
+      this.mapControl.latitude = latitude
+      this.mapControl.longitude = longitude
+      this.mapControl.zoom = 14
+
 
       if (!this.drawerOpen) {
         this.drawerOpen = true
@@ -42,6 +51,11 @@ class Core {
 
           // store it
           this.dataSource = json
+
+          // find center
+          const { geometry: { coordinates: [longitude, latitude] } } = center(json)
+          this.mapControl.latitude = latitude
+          this.mapControl.longitude = longitude
 
           return this.dataSource
         })

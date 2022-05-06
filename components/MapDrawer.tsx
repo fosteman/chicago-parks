@@ -6,7 +6,6 @@ import { toJS } from 'mobx'
 
 
 export default observer(() => {
-  console.log(toJS(core.selectedPark?.properties))
   return (
     <>
       <Drawer

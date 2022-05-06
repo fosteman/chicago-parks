@@ -9,16 +9,10 @@ import { observer } from 'mobx-react'
 
 export default observer(() => {
   const [viewport, setViewport] = useState({})
-  const [allParks, setAllParks] = useState<any[]>([])
-  const [mapControl, setMapControl] = useState({ latitude: 0, longitude: 0, zoom: 11 })
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    core.loadParks().then(allParks => {
-      // find center
-      const { geometry: { coordinates: [longitude, latitude] } } = center(allParks)
-      setMapControl(prev => ({ ...prev, latitude, longitude }))
-    }).catch(err => enqueueSnackbar(`${err}`, { variant: 'error' }))
+    core.loadParks().catch(err => enqueueSnackbar(`${err}`, { variant: 'error' }))
   }, [])
 
 
@@ -30,16 +24,9 @@ export default observer(() => {
       height='100%'
       onViewportChange={setViewport}
       onViewStateChange={(props: { viewState: { latitude: number; longitude: number, zoom: number } }) => {
-        setMapControl(prev => ({
-          ...prev,
-          latitude: props.viewState.latitude,
-          longitude: props.viewState.longitude,
-          zoom: props.viewState.zoom,
-        }))
+        core.mapControl = props.viewState
       }}
-      latitude={mapControl.latitude}
-      longitude={mapControl.longitude}
-      zoom={mapControl.zoom}
+      viewState={core.mapControl}
     >
       {core.dataSource?.features.map((feature: Feature, index: number) => (
         <Marker
