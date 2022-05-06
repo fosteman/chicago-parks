@@ -32,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+/.idea/chicago-parks.iml
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/modules.xml
+/.idea/codeStyles/Project.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
