@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import ReactMapGL, { Marker } from 'react-map-gl'
 import { LinearProgress } from '@mui/material'
-import { center, Feature, Geometry } from '@turf/turf'
+import { center, Feature, FeatureCollection, Geometry } from '@turf/turf'
 import { useSnackbar } from 'notistack'
+import { Pin } from '@mui/icons-material'
 import core from './common/core'
 import { observer } from 'mobx-react'
 
@@ -14,15 +15,6 @@ export default observer(() => {
   const [mapControl, setMapControl] = useState({ latitude: 0, longitude: 0, zoom: 11 })
   const { enqueueSnackbar } = useSnackbar()
 
-  useEffect(() => {
-    core.loadParks().then(allParks => {
-      // find center
-      const { geometry: { coordinates: [longitude, latitude] } } = center(allParks)
-      setMapControl(prev => ({ ...prev, latitude, longitude }))
-    }).catch(err => enqueueSnackbar(`${err}`, { variant: 'error' }))
-  }, [])
-
-
   if (loading) return <LinearProgress />
 
   return (
@@ -33,12 +25,7 @@ export default observer(() => {
       height='100%'
       onViewportChange={setViewport}
       onViewStateChange={(props: { viewState: { latitude: number; longitude: number, zoom: number } }) => {
-        setMapControl(prev => ({
-          ...prev,
-          latitude: props.viewState.latitude,
-          longitude: props.viewState.longitude,
-          zoom: props.viewState.zoom,
-        }))
+        setMapControl(prev =>({ ...prev, latitude: props.viewState.latitude, longitude: props.viewState.longitude, zoom: props.viewState.zoom }))
       }}
       latitude={mapControl.latitude}
       longitude={mapControl.longitude}
@@ -56,9 +43,7 @@ export default observer(() => {
             core.selectPark(feature)
           }}
         >
-          <img style={core.selectedPark?.id === feature.id ? { filter: `invert(1)` } : {}}
-               src={'https://www.nicepng.com/png/detail/519-5195611_park-icon-the-noun-project.png'} height={32}
-               width={32} />
+          <img style={core.selectedPark?.id === feature.id ? {filter: `invert(1)`} : {}} src={'https://www.nicepng.com/png/detail/519-5195611_park-icon-the-noun-project.png'} height={32} width={32} />
         </Marker>
       ))}
 
