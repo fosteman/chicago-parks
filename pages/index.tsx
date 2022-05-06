@@ -3,12 +3,11 @@ import type { NextPage } from 'next'
 import Header from '../components/common/Header'
 import Map from '../components/Map'
 import MapDrawer from '../components/MapDrawer'
-import { SnackbarProvider } from 'notistack'
 import core from '../components/common/core'
 
 const Home: NextPage = () => {
   return (
-    <SnackbarProvider>
+    <>
       <Header />
       <Box display='flex'>
         <Box flexShrink={0}>
@@ -18,7 +17,7 @@ const Home: NextPage = () => {
           <Map />
         </Box>
       </Box>
-    </SnackbarProvider>
+    </>
   )
 }
 

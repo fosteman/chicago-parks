@@ -9,7 +9,6 @@ import { observer } from 'mobx-react'
 
 export default observer(() => {
   const [viewport, setViewport] = useState({})
-  const [loading, setLoading] = useState(true)
   const [allParks, setAllParks] = useState<any[]>([])
   const [mapControl, setMapControl] = useState({ latitude: 0, longitude: 0, zoom: 11 })
   const { enqueueSnackbar } = useSnackbar()
@@ -22,8 +21,6 @@ export default observer(() => {
     }).catch(err => enqueueSnackbar(`${err}`, { variant: 'error' }))
   }, [])
 
-
-  if (loading) return <LinearProgress />
 
   return (
     <ReactMapGL
@@ -44,7 +41,7 @@ export default observer(() => {
       longitude={mapControl.longitude}
       zoom={mapControl.zoom}
     >
-      {core.allParks?.features.map((feature: Feature, index: number) => (
+      {core.dataSource?.features.map((feature: Feature, index: number) => (
         <Marker
           key={`marker-${index}`}
           latitude={((feature.geometry as Geometry).coordinates[1] as number)}

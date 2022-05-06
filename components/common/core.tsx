@@ -14,7 +14,7 @@ class Core {
 
 
   selectedPark: Feature | null = null
-  allParks?: FeatureCollection
+  dataSource?: FeatureCollection
 
   drawerOpen = false
 
@@ -31,7 +31,7 @@ class Core {
   }
 
   async loadParks(): Promise<FeatureCollection> {
-    if (!this.allParks) {
+    if (!this.dataSource) {
       return fetch(
         '/api/parks',
       )
@@ -41,12 +41,12 @@ class Core {
           json.features = json.features.map((f, id) => ({ ...f, id }))
 
           // store it
-          this.allParks = json
+          this.dataSource = json
 
-          return this.allParks
+          return this.dataSource
         })
     } else {
-      return this.allParks
+      return this.dataSource
     }
   }
 }
