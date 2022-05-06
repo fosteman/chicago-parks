@@ -4,13 +4,13 @@ import Header from "../components/common/Header";
 import Map from "../components/Map";
 import { useState } from "react";
 import MapDrawer from "../components/MapDrawer";
-
+import {SnackbarProvider} from 'notistack'
 const drawerWidth = 300;
 
 const Home: NextPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   return (
-    <>
+    <SnackbarProvider>
       <Header setDrawerOpen={setDrawerOpen} />
       <Box display="flex">
         <Box flexShrink={0}>
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
           <Map />
         </Box>
       </Box>
-    </>
+    </SnackbarProvider>
   );
 };
 
