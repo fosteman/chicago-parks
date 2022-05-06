@@ -1,31 +1,25 @@
-import { Box } from "@mui/system";
-import type { NextPage } from "next";
-import Header from "../components/common/Header";
-import Map from "../components/Map";
-import { useState } from "react";
-import MapDrawer from "../components/MapDrawer";
-import {SnackbarProvider} from 'notistack'
-const drawerWidth = 300;
+import { Box } from '@mui/system'
+import type { NextPage } from 'next'
+import Header from '../components/common/Header'
+import Map from '../components/Map'
+import MapDrawer from '../components/MapDrawer'
+import { SnackbarProvider } from 'notistack'
+import core from '../components/common/core'
 
 const Home: NextPage = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
   return (
     <SnackbarProvider>
-      <Header setDrawerOpen={setDrawerOpen} />
-      <Box display="flex">
+      <Header />
+      <Box display='flex'>
         <Box flexShrink={0}>
-          <MapDrawer
-            drawerWidth={drawerWidth}
-            drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
-          />
+          <MapDrawer />
         </Box>
-        <Box flexGrow={1} sx={{ height: "100vh", width: "100vw" }}>
+        <Box flexGrow={1} sx={{ height: '100vh', width: '100vw' }}>
           <Map />
         </Box>
       </Box>
     </SnackbarProvider>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

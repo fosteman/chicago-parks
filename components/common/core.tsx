@@ -11,8 +11,21 @@ class Core {
   }
 
   selectedPark: Feature | null = null
-
   allParks?: FeatureCollection
+
+  drawerOpen = false
+
+  selectPark(feature: Feature) {
+    if (this.selectedPark?.id === feature.id) {
+      this.selectedPark = null
+    } else {
+      this.selectedPark = feature
+
+      if (!this.drawerOpen) {
+        this.drawerOpen = true
+      }
+    }
+  }
 }
 
 export default new Core();

@@ -4,7 +4,7 @@ import { LinearProgress } from '@mui/material'
 import { center, Feature, FeatureCollection, Geometry } from '@turf/turf'
 import { useSnackbar } from 'notistack'
 import { Pin } from '@mui/icons-material'
-import core from './common/Core'
+import core from './common/core'
 import { observer } from 'mobx-react'
 
 
@@ -65,11 +65,7 @@ export default observer(() => {
           onClick={(e: any) => {
             e.stopPropagation()
 
-            if (core.selectedPark?.id === feature.id) {
-              core.selectedPark = null
-            } else {
-              core.selectedPark = feature
-            }
+            core.selectPark(feature)
           }}
         >
           <img style={core.selectedPark?.id === feature.id ? {filter: `invert(1)`} : {}} src={'https://www.nicepng.com/png/detail/519-5195611_park-icon-the-noun-project.png'} height={32} width={32} />

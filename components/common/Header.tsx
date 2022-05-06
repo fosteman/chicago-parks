@@ -1,26 +1,24 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
 import React from 'react'
+import core from './core'
 
-type Props = {
-  setDrawerOpen: (open: boolean) => void
-}
 
-export default function Header({ setDrawerOpen }: Props) {
+export default () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position='fixed'>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
             Chicago Parks
           </Typography>
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open-menu"
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='open-menu'
             sx={{ mr: 2 }}
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => core.drawerOpen = true}
           >
             <MenuIcon />
           </IconButton>
