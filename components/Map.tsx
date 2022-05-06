@@ -1,31 +1,38 @@
 import { useEffect, useState } from 'react'
-import ReactMapGL, { Layer, Source } from 'react-map-gl'
+import ReactMapGL, { Marker } from 'react-map-gl'
 import { LinearProgress } from '@mui/material'
-import { center } from '@turf/turf'
+import { center, Feature, FeatureCollection, Geometry } from '@turf/turf'
 import { useSnackbar } from 'notistack'
+import { Pin } from '@mui/icons-material'
+import core from './common/Core'
+import { observer } from 'mobx-react'
 
 
-export default function Map() {
+export default observer(() => {
   const [viewport, setViewport] = useState({})
   const [loading, setLoading] = useState(true)
-  const [allParks, setAllParks] = useState(null)
+  const [allParks, setAllParks] = useState<any[]>([])
   const [mapControl, setMapControl] = useState({ latitude: 0, longitude: 0, zoom: 11 })
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
-    if (!allParks) {
+    if (!allParks.length) {
       fetch(
         '/api/parks',
       )
         .then(resp => resp.json())
-        .then(json => {
+        .then((json: FeatureCollection) => {
+          // create ID on each feature
+          json.features = json.features.map((f, id) => ({...f, id}))
+
+          // store it
+          core.allParks = json
 
           // find center
-          const { geometry: { coordinates: [longitude, latitude] } } = center(json)
+          const { geometry: { coordinates: [longitude, latitude] } } = center(core.allParks)
           setMapControl(prev => ({ ...prev, latitude, longitude }))
 
 
-          setAllParks(json)
           setLoading(false)
         })
         .catch(err => enqueueSnackbar(`${err}`, { variant: 'error' }))
@@ -42,7 +49,6 @@ export default function Map() {
       width='100%'
       height='100%'
       onViewportChange={setViewport}
-      interactiveLayerIds={['parks']}
       onViewStateChange={(props: { viewState: { latitude: number; longitude: number, zoom: number } }) => {
         setMapControl(prev =>({ ...prev, latitude: props.viewState.latitude, longitude: props.viewState.longitude, zoom: props.viewState.zoom }))
       }}
@@ -50,16 +56,26 @@ export default function Map() {
       longitude={mapControl.longitude}
       zoom={mapControl.zoom}
     >
-      <Source id={'parks'} type='geojson' data={allParks!}>
-        <Layer id={'parks'}
-               type={'circle'}
-               paint={{
-                 'circle-radius': 12,
-                 'circle-color': 'green',
-               }}
-        />
-      </Source>
+      {core.allParks?.features.map((feature: Feature, index: number) => (
+        <Marker
+          key={`marker-${index}`}
+          latitude={((feature.geometry as Geometry).coordinates[1] as number)}
+          longitude={((feature.geometry as Geometry).coordinates[0] as number)}
+          // anchor="bottom"
+          onClick={(e: any) => {
+            e.stopPropagation()
+
+            if (core.selectedPark?.id === feature.id) {
+              core.selectedPark = null
+            } else {
+              core.selectedPark = feature
+            }
+          }}
+        >
+          <img style={core.selectedPark?.id === feature.id ? {filter: `invert(1)`} : {}} src={'https://www.nicepng.com/png/detail/519-5195611_park-icon-the-noun-project.png'} height={32} width={32} />
+        </Marker>
+      ))}
 
     </ReactMapGL>
   )
-}
+})
