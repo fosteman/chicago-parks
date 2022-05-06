@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { MapOutlined } from '@mui/icons-material'
 
 
-export default () => {
+export default function Header() {
   const router = useRouter()
 
   return (
