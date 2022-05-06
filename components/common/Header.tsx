@@ -1,26 +1,50 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
 import React from 'react'
+import core from './core'
+import { useRouter } from 'next/router'
+import { MapOutlined } from '@mui/icons-material'
 
-type Props = {
-  setDrawerOpen: (open: boolean) => void
-}
 
-export default function Header({ setDrawerOpen }: Props) {
+export default function Header() {
+  const router = useRouter()
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position='fixed'>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+
+          {router.pathname === '/' && <IconButton
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='open-menu'
+            sx={{ mr: 2 }}
+            onClick={() => router.push('/list')}
+          >
+            <MenuIcon />
+          </IconButton>}
+          {router.pathname === '/list' && <IconButton
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='open-menu'
+            sx={{ mr: 2 }}
+            onClick={() => router.push('/')}
+          >
+            <MapOutlined />
+          </IconButton>}
+
+          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
             Chicago Parks
           </Typography>
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open-menu"
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='open-menu'
             sx={{ mr: 2 }}
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => core.drawerOpen = true}
           >
             <MenuIcon />
           </IconButton>

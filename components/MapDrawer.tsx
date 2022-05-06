@@ -1,39 +1,51 @@
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import { Box, Drawer, IconButton, Toolbar, Typography } from '@mui/material'
+import core from './common/core'
+import { observer } from 'mobx-react'
+import { toJS } from 'mobx'
 
-type Props = {
-  drawerWidth: number
-  drawerOpen: boolean
-  setDrawerOpen: (open: boolean) => void
-}
 
-export default function MapDrawer({ drawerWidth, drawerOpen, setDrawerOpen }: Props) {
+export default observer(() => {
   return (
     <>
       <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        variant="persistent"
+        anchor='right'
+        open={core.drawerOpen}
+        onClose={() => core.drawerOpen = false}
+        variant='persistent'
       >
         <Toolbar>
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="close-menu"
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='close-menu'
             sx={{ mr: 2 }}
-            onClick={() => setDrawerOpen(false)}
+            onClick={() => core.drawerOpen = false}
           >
             <KeyboardArrowRightIcon />
           </IconButton>
         </Toolbar>
-        <Box sx={{ width: drawerWidth }} role="presentation" display="flex" justifyContent="center">
-          <Typography variant="h6" color="textSecondary" sx={{ mt: 10 }}>
-            bananas
-          </Typography>
-        </Box>
+
+        {core.selectedPark ? <Box sx={{ width: 300, p: 1 }}>
+            <Typography variant='h4' sx={{ mb: 2 }}>
+              {core.selectedPark?.properties!.title}
+            </Typography>
+
+            <Typography>
+              {core.selectedPark?.properties!.description}
+            </Typography>
+          </Box> :
+
+          <Box sx={{  width: 300, height: '100%', display: 'flex', alignItems:'center', textAlign: 'center' }}>
+            <Typography>
+              Select a Chicago park
+              on the map to see info about it!
+            </Typography>
+          </Box>
+        }
+
       </Drawer>
     </>
   )
-}
+})
